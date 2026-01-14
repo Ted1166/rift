@@ -1,6 +1,6 @@
 # ⚔️ RIFT COMMANDERS
 
-> **A fully on-chain tactical strategy game built on Mantle Network**
+> **A tactical strategy game**
 
 ![Mantle](https://img.shields.io/badge/Mantle-Sepolia-blue)
 ![Solidity](https://img.shields.io/badge/Solidity-0.8.20-orange)
