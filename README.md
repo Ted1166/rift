@@ -27,7 +27,7 @@ Strategic 2-player turn-based combat on a 5×5 battlefield. Command your forces,
 
 ## 🎮 Overview
 
-**Rift Commanders** is a fully on-chain tactical strategy game where two players command their forces on a 5×5 battlefield. Victory is achieved by eliminating the enemy Commander through strategic planning and simultaneous turn execution.
+**Rift Commanders** is a tactical combat game where two players deploy units, plan moves simultaneously, and battle in commit-reveal turns. Victory is achieved by eliminating the enemy Commander through strategic planning and simultaneous turn execution.
 
 - **Genre:** Turn-based Tactical Strategy
 - **Blockchain:** Mantle Network (Sepolia Testnet)
@@ -224,17 +224,6 @@ rift-commanders/
     └── vite.config.ts
 ```
 
----
-
-## 🌐 Deployment
-
-### Deployed Contracts (Mantle Sepolia)
-
-```
-GameFactory:     0x...
-GameState:       0x...
-Combat:          0x...
-TurnExecution:   0x...
 ```
 
 View on Mantle Sepolia Explorer:
@@ -334,14 +323,6 @@ npm run dev
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ---
 
 ## 📄 License
@@ -350,19 +331,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
-
-- Built for **Mantle Global Hackathon 2025**
-- Powered by **Mantle Network**
-- EVM compatible infrastructure
-- ConnectKit for wallet integration
-
----
-
 ## 📞 Contact
 
-- **Developer:** [Your Name]
-- **GitHub:** [@yourusername](https://github.com/yourusername)
+- **Developer:** [Ted Adams]
+- **GitHub:** [@yourusername](https://github.com/Ted1166)
 - **Twitter:** [@yourhandle](https://twitter.com/yourhandle)
 
 ---
@@ -387,5 +359,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Smart contracts are immutable after deployment
 
 ---
-
-**Built with ⚔️ for Mantle Global Hackathon 2025**
