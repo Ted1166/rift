@@ -21,9 +21,12 @@ const config = getDefaultConfig({
   appName: "Rift Commanders",
   projectId: (import.meta as any).env.VITE_WALLETCONNECT_PROJECT_ID || "",
   chains: [mantleSepolia] as const,
-  // Add transports - this is what's missing!
   transports: {
-    [mantleSepolia.id]: http('https://rpc.sepolia.mantle.xyz'),
+    [mantleSepolia.id]: http('https://rpc.sepolia.mantle.xyz', {
+      // Add fallback URLs
+      retryCount: 3,
+      timeout: 30_000,
+    }),
   },
 });
 
