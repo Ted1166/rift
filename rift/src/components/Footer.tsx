@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Swords } from "lucide-react";
 
 const Footer = () => {
@@ -6,15 +7,18 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <Swords className="w-8 h-8 text-primary" />
             <span className="font-display text-xl font-bold text-foreground">
               RIFT COMMANDERS
             </span>
-          </div>
+          </Link>
 
           {/* Links */}
           <div className="flex items-center gap-8 text-sm font-body text-muted-foreground">
+            <Link to="/leaderboard" className="hover:text-primary transition-colors">
+              Leaderboard
+            </Link>
             <a href="#" className="hover:text-primary transition-colors">Docs</a>
             <a href="#" className="hover:text-primary transition-colors">GitHub</a>
             <a href="#" className="hover:text-primary transition-colors">Twitter</a>

@@ -6,6 +6,7 @@ import { Web3Provider } from "./providers/Web3Provider";
 import Index from "./pages/Index";
 import Game from "./pages/Game";
 import Lobby from "./pages/Lobby";
+import Leaderboard from "./pages/Leaderboard";
 
 const App = () => (
   <Web3Provider>
@@ -17,6 +18,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/lobby" element={<Lobby />} />
           <Route path="/game/:gameId" element={<Game />} />
+          <Route path="/leaderboard" element={<Leaderboard/>}/>
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

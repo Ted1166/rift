@@ -95,6 +95,62 @@ contract GameState {
         emit GameInitialized(gameId, player1, player2);
     }
 
+    // Add this function to GameState.sol after deployUnit()
+
+    function batchDeployUnits(
+        uint256 gameId,
+        UnitType[] calldata unitTypes,
+        uint8[] calldata xPositions,
+        uint8[] calldata yPositions
+    ) external onlyPlayer(gameId) {
+        Game storage game = games[gameId];
+        require(game.phase == GamePhase.Deployment, "Not deployment phase");
+        require(unitTypes.length == 3, "Must deploy exactly 3 units");
+        require(unitTypes.length == xPositions.length, "Array length mismatch");
+        require(unitTypes.length == yPositions.length, "Array length mismatch");
+        
+        bool isPlayer1 = msg.sender == game.player1;
+        require(
+            isPlayer1 ? game.player1UnitsDeployed == 0 : game.player2UnitsDeployed == 0,
+            "Already deployed"
+        );
+        
+        for (uint256 i = 0; i < 3; i++) {
+            require(xPositions[i] < 5 && yPositions[i] < 5, "Out of bounds");
+            require(battlefield[gameId][xPositions[i]][yPositions[i]] == 0, "Tile occupied");
+            require(_isValidDeploymentZone(isPlayer1, yPositions[i]), "Invalid zone");
+            
+            uint8 unitId = isPlayer1 ? uint8(i) : uint8(3 + i);
+            
+            units[gameId][unitId] = Unit({
+                unitType: unitTypes[i],
+                x: xPositions[i],
+                y: yPositions[i],
+                health: _getUnitHealth(unitTypes[i]),
+                attack: _getUnitAttack(unitTypes[i]),
+                defense: _getUnitDefense(unitTypes[i]),
+                owner: msg.sender,
+                isAlive: true,
+                id: unitId
+            });
+            
+            battlefield[gameId][xPositions[i]][yPositions[i]] = unitId + 1;
+            emit UnitDeployed(gameId, msg.sender, unitId, xPositions[i], yPositions[i]);
+        }
+        
+        if (isPlayer1) {
+            game.player1UnitsDeployed = 3;
+        } else {
+            game.player2UnitsDeployed = 3;
+        }
+        
+        if (game.player1UnitsDeployed == 3 && game.player2UnitsDeployed == 3) {
+            game.phase = GamePhase.Planning;
+            game.lastActionTime = block.timestamp;
+            emit PhaseChanged(gameId, GamePhase.Planning);
+        }
+    }
+
     function deployUnit(
         uint256 gameId,
         UnitType unitType,
@@ -208,8 +264,7 @@ contract GameState {
         _processAttacks(gameId, p1UnitIds, p1Actions, p1TargetX, p1TargetY);
         _processAttacks(gameId, p2UnitIds, p2Actions, p2TargetX, p2TargetY);
         
-        // Clear defending status
-        for (uint256 i = 0; i < 6; i++) { // uint256
+        for (uint256 i = 0; i < 6; i++) {
             delete defendingUnits[gameId][uint8(i)];
         }
         
@@ -220,6 +275,11 @@ contract GameState {
             game.phase = GamePhase.Ended;
             game.isActive = false;
             emit GameEnded(gameId, game.winner);
+
+            (bool success,) = factory.call(
+                abi.encodeWithSignature("recordGameEnd(uint256)", gameId)
+            );
+            require(success, "Stats recording failed");
         } else {
             game.phase = GamePhase.Planning;
             game.lastActionTime = block.timestamp;
@@ -232,7 +292,7 @@ contract GameState {
         uint8[] memory unitIds,
         uint8[] memory actions
     ) internal {
-        for (uint256 i = 0; i < unitIds.length; i++) { // uint256 instead of uint8
+        for (uint256 i = 0; i < unitIds.length; i++) {
             if (actions[i] == 2) {
                 Unit storage unit = units[gameId][unitIds[i]];
                 if (unit.isAlive) {
@@ -250,7 +310,7 @@ contract GameState {
         uint8[] memory targetX,
         uint8[] memory targetY
     ) internal {
-        for (uint256 i = 0; i < unitIds.length; i++) { // uint256
+        for (uint256 i = 0; i < unitIds.length; i++) {
             if (actions[i] == 0) {
                 Unit storage unit = units[gameId][unitIds[i]];
                 if (!unit.isAlive) continue;
@@ -281,7 +341,7 @@ contract GameState {
         uint8[] memory targetX,
         uint8[] memory targetY
     ) internal {
-        for (uint256 i = 0; i < unitIds.length; i++) { // uint256
+        for (uint256 i = 0; i < unitIds.length; i++) {
             if (actions[i] == 1) {
                 _executeAttack(gameId, unitIds[i], targetX[i], targetY[i]);
             }

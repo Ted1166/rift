@@ -1,0 +1,10 @@
+{
+  "deployer": "0x2ec236a1e06715712749BCA3c7D242c3b9caE6D7",
+  "deploymentTime": "2026-01-15T11:04:45.963Z",
+  "contracts": {
+    "GameFactory": "0xA8DE69F33B734ee53356E2a9899Ad0ef77457801",
+    "GameState": "0x2b045e4bDC8c4DC349CF2F89E13cca02951F26E7",
+    "Combat": "0x9501BC1165aFA36f269170B3c2A89ACd7cF208b0",
+    "TurnExecution": "0xE1963BAe76F1B8Db4C733a5b754CD349DE7D92AA"
+  }
+}

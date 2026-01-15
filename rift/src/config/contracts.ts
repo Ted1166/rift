@@ -2,6 +2,7 @@
 export const CONTRACT_ADDRESSES = {
   GAME_FACTORY: (import.meta as any).env.VITE_GAME_FACTORY_ADDRESS as `0x${string}`,
   GAME_STATE: (import.meta as any).env.VITE_GAME_STATE_ADDRESS as `0x${string}`,
+  PLAYER_STATS: (import.meta as any).env.VITE_PLAYER_STATS_ADDRESS as `0x${string}`,
   COMBAT: (import.meta as any).env.VITE_COMBAT_ADDRESS as `0x${string}`,
   TURN_EXECUTION: (import.meta as any).env.VITE_TURN_EXECUTION_ADDRESS as `0x${string}`,
 } as const;
@@ -179,6 +180,18 @@ export const GAME_STATE_ABI = [
     "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "gameId", "type": "uint256" },
+      { "internalType": "enum GameState.UnitType[]", "name": "unitTypes", "type": "uint8[]" },
+      { "internalType": "uint8[]", "name": "xPositions", "type": "uint8[]" },
+      { "internalType": "uint8[]", "name": "yPositions", "type": "uint8[]" }
+    ],
+    "name": "batchDeployUnits",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -422,11 +435,56 @@ export const GAME_STATE_ABI = [
   }
 ] as const;
 
+// Add to contracts.ts
+
+export const PLAYER_STATS_ABI = [
+  {
+    "inputs": [{ "internalType": "address", "name": "player", "type": "address" }],
+    "name": "getStats",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "gamesPlayed", "type": "uint256" },
+          { "internalType": "uint256", "name": "wins", "type": "uint256" },
+          { "internalType": "uint256", "name": "losses", "type": "uint256" },
+          { "internalType": "uint256", "name": "totalDamageDealt", "type": "uint256" },
+          { "internalType": "uint256", "name": "totalUnitsKilled", "type": "uint256" },
+          { "internalType": "uint256", "name": "winStreak", "type": "uint256" },
+          { "internalType": "uint256", "name": "bestWinStreak", "type": "uint256" }
+        ],
+        "internalType": "struct PlayerStats.Stats",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "player", "type": "address" }],
+    "name": "getWinRate",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "limit", "type": "uint256" }],
+    "name": "getTopPlayers",
+    "outputs": [
+      { "internalType": "address[]", "name": "", "type": "address[]" },
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+] as const;
+
 // Helper to validate contract addresses are set
 export function validateContractAddresses(): boolean {
   return Boolean(
     CONTRACT_ADDRESSES.GAME_FACTORY &&
     CONTRACT_ADDRESSES.GAME_STATE &&
+    CONTRACT_ADDRESSES.PLAYER_STATS&&
     CONTRACT_ADDRESSES.COMBAT &&
     CONTRACT_ADDRESSES.TURN_EXECUTION
   );

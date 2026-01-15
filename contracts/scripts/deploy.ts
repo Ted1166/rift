@@ -34,7 +34,7 @@ async function main() {
     contracts: {},
   };
 
-  // Deploy GameFactory (which creates GameState, Combat, and TurnExecution internally)
+  // Deploy GameFactory (which creates GameState, Combat, TurnExecution, and PlayerStats internally)
   console.log("📦 [1/1] Deploying GameFactory...");
   const GameFactoryArtifact = await hre.artifacts.readArtifact("GameFactory");
   const GameFactoryFactory = new ethers.ContractFactory(
@@ -59,7 +59,9 @@ async function main() {
   );
   
   const gameStateAddress = await gameFactoryContract.gameState();
+  const playerStatsAddress = await gameFactoryContract.playerStats();
   console.log("✅ GameState deployed to:", gameStateAddress);
+  console.log("✅ PlayerStats deployed to:", playerStatsAddress);
 
   // Get Combat and TurnExecution addresses from GameState
   const GameStateArtifact = await hre.artifacts.readArtifact("GameState");
@@ -79,6 +81,7 @@ async function main() {
   deploymentInfo.contracts = {
     GameFactory: factoryAddress,
     GameState: gameStateAddress,
+    PlayerStats: playerStatsAddress,
     Combat: combatAddress,
     TurnExecution: turnExecutionAddress,
   };
@@ -119,6 +122,7 @@ async function main() {
   console.log("─────────────────────────────────────────────────────────");
   console.log(`VITE_GAME_FACTORY_ADDRESS=${factoryAddress}`);
   console.log(`VITE_GAME_STATE_ADDRESS=${gameStateAddress}`);
+  console.log(`VITE_PLAYER_STATS_ADDRESS=${playerStatsAddress}`);
   console.log(`VITE_COMBAT_ADDRESS=${combatAddress}`);
   console.log(`VITE_TURN_EXECUTION_ADDRESS=${turnExecutionAddress}`);
   console.log("─────────────────────────────────────────────────────────");

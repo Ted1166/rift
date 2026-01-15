@@ -26,12 +26,12 @@ export function useGameState(gameId: bigint) {
 export function useGameActions(gameId: bigint) {
   const { writeContractAsync } = useWriteContract();
 
-  const deployUnit = async (unitType: UnitType, x: number, y: number) => {
+  const deployUnit = async (unitTypes: UnitType[], xPositions: number[], yPositions: number[]) => {
     return await writeContractAsync({
       address: CONTRACT_ADDRESSES.GAME_STATE,
       abi: GAME_STATE_ABI,
-      functionName: "deployUnit",
-      args: [gameId, unitType, x, y],
+      functionName: "batchDeployUnits",
+      args: [gameId, unitTypes, xPositions, yPositions],
     }as any);
   };
 

@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "./GameState.sol";
+import "./PlayerStats.sol";
 
 contract GameFactory {
     struct Lobby {
@@ -17,6 +18,7 @@ contract GameFactory {
 
     GameState public gameState;
     uint256 public gameCounter;
+    PlayerStats public playerStats;
     
     mapping(uint256 => Lobby) public lobbies;
     mapping(address => uint256[]) public playerGames;
@@ -30,6 +32,7 @@ contract GameFactory {
     constructor() {
         gameState = new GameState(); 
         gameState.setFactory(address(this)); 
+        playerStats = new PlayerStats(address(this));
     }
 
     function createLobby(bool isPrivate) external payable returns (uint256) {
@@ -84,6 +87,21 @@ contract GameFactory {
         uint256 gameId = openLobbies[0];
         this.joinLobby{value: msg.value}(gameId);
         return gameId;
+    }
+
+    function recordGameEnd(uint256 gameId) external {
+        require(msg.sender == address(gameState), "Only GameState");
+        
+        Lobby storage lobby = lobbies[gameId];
+        GameState.Game memory game = gameState.getGame(gameId);
+        
+        require(game.phase == GameState.GamePhase.Ended, "Game not ended");
+        require(game.winner != address(0), "No winner");
+        
+        address loser = game.winner == lobby.player1 ? lobby.player2 : lobby.player1;
+        
+        // Record stats (can add damage/kills tracking later)
+        playerStats.recordGameResult(game.winner, loser, 0, 0);
     }
 
     function claimWinnings(uint256 gameId) external {
