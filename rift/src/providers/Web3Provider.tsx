@@ -33,6 +33,7 @@ const config = getDefaultConfig({
       timeout: 30_000,
     }),
   },
+  ssr: false,
 });
 
 const queryClient = new QueryClient({
