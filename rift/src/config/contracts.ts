@@ -19,8 +19,8 @@ export const CHAIN_CONFIG = {
       symbol: 'MNT',
     },
     rpcUrls: {
-      default: { http: ['https://rpc.sepolia.mantle.xyz'] },
-      public: { http: ['https://rpc.sepolia.mantle.xyz'] },
+      default: { http: ['https://rpc.testnet.mantle.xyz'] },
+      public: { http: ['https://rpc.testnet.mantle.xyz'] },
     },
     blockExplorers: {
       default: { name: 'Mantle Sepolia Explorer', url: 'https://explorer.sepolia.mantle.xyz' },
