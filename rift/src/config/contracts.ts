@@ -19,32 +19,25 @@ export const CHAIN_CONFIG = {
       symbol: 'MNT',
     },
     rpcUrls: {
-      default: { http: ['https://rpc.sepolia.mantle.xyz'] },
-      public: { http: ['https://rpc.sepolia.mantle.xyz'] },
+      default: { 
+        http: [
+          'https://rpc.sepolia.mantle.xyz',
+          'https://rpc.testnet.mantle.xyz'
+        ] 
+      },
+      public: { 
+        http: [
+          'https://rpc.sepolia.mantle.xyz',
+          'https://rpc.testnet.mantle.xyz'
+        ] 
+      },
     },
     blockExplorers: {
       default: { name: 'Mantle Sepolia Explorer', url: 'https://explorer.sepolia.mantle.xyz' },
     },
     testnet: true,
   },
-  mantleMainnet: {
-    id: 5000,
-    name: 'Mantle',
-    network: 'mantle',
-    nativeCurrency: {
-      decimals: 18,
-      name: 'MNT',
-      symbol: 'MNT',
-    },
-    rpcUrls: {
-      default: { http: ['https://rpc.mantle.xyz'] },
-      public: { http: ['https://rpc.mantle.xyz'] },
-    },
-    blockExplorers: {
-      default: { name: 'Mantle Explorer', url: 'https://explorer.mantle.xyz' },
-    },
-    testnet: false,
-  },
+  // ... rest of config
 } as const;
 
 // Contract ABIs

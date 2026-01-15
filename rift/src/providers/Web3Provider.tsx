@@ -9,7 +9,12 @@ const mantleSepolia = {
   name: "Mantle Sepolia",
   nativeCurrency: { name: "MNT", symbol: "MNT", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://rpc.sepolia.mantle.xyz"] },
+    default: { 
+      http: [
+        "https://rpc.sepolia.mantle.xyz",
+        "https://rpc.testnet.mantle.xyz" // fallback
+      ] 
+    },
   },
   blockExplorers: {
     default: { name: "Explorer", url: "https://explorer.sepolia.mantle.xyz" },
@@ -20,10 +25,24 @@ const mantleSepolia = {
 const config = getDefaultConfig({
   appName: "Rift Commanders",
   projectId: (import.meta as any).env.VITE_WALLETCONNECT_PROJECT_ID || "",
-  chains: [mantleSepolia],
+  chains: [mantleSepolia] as const,
+  transports: {
+    [mantleSepolia.id]: http("https://rpc.sepolia.mantle.xyz", {
+      batch: true,
+      retryCount: 3,
+      timeout: 30_000,
+    }),
+  },
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    },
+  },
+});
 
 export function Web3Provider({ children }: { children: ReactNode }) {
   return (
